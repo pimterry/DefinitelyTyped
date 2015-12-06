@@ -6543,11 +6543,17 @@ module TestMerge {
     type InitialValue = { a : number };
     type MergingValue = { b : string };
 
-    var initialValue  = { a : 1 };
-    var mergingValue  = { b : "hi" };
+    let initialValue  = { a : 1 };
+    let mergingValue  = { b : "hi" };
+
+    type ComplicatedExpectedType = { a: number, b: string, c: {}, d: number[], e: boolean };
+    let complicatedResult: ComplicatedExpectedType;
 
     type ExpectedResult = { a: number, b: string };
     let result: ExpectedResult;
+
+    type ExpectedTypeAfterOverriding = { a: boolean };
+    let overriddenResult: ExpectedTypeAfterOverriding;
 
     let customizer: (value: any, srcValue: any, key?: string, object?: InitialValue, source?: MergingValue) => any;
 
@@ -6557,17 +6563,33 @@ module TestMerge {
     result = _.merge(initialValue, mergingValue, customizer);
     result = _.merge(initialValue, mergingValue, customizer, any);
 
+    result = _.merge<InitialValue, MergingValue, ExpectedResult>(initialValue, mergingValue);
+    result = _.merge<InitialValue, MergingValue, ExpectedResult>(initialValue, mergingValue, customizer);
+    result = _.merge<InitialValue, MergingValue, ExpectedResult>(initialValue, mergingValue, customizer, any);
+
     result = _.merge(initialValue, {}, mergingValue);
     result = _.merge(initialValue, {}, mergingValue, customizer);
     result = _.merge(initialValue, {}, mergingValue, customizer, any);
+
+    result = _.merge<InitialValue, {}, MergingValue, ExpectedResult>(initialValue, {}, mergingValue);
+    result = _.merge<InitialValue, {}, MergingValue, ExpectedResult>(initialValue, {}, mergingValue, customizer);
+    result = _.merge<InitialValue, {}, MergingValue, ExpectedResult>(initialValue, {}, mergingValue, customizer, any);
 
     result = _.merge(initialValue, {}, {}, mergingValue);
     result = _.merge(initialValue, {}, {}, mergingValue, customizer);
     result = _.merge(initialValue, {}, {}, mergingValue, customizer, any);
 
+    result = _.merge<InitialValue, {}, {}, MergingValue, ExpectedResult>(initialValue, {}, {}, mergingValue);
+    result = _.merge<InitialValue, {}, {}, MergingValue, ExpectedResult>(initialValue, {}, {}, mergingValue, customizer);
+    result = _.merge<InitialValue, {}, {}, MergingValue, ExpectedResult>(initialValue, {}, {}, mergingValue, customizer, any);
+
     result = _.merge(initialValue, {}, {}, {}, mergingValue);
     result = _.merge(initialValue, {}, {}, {}, mergingValue, customizer);
     result = _.merge(initialValue, {}, {}, {}, mergingValue, customizer, any);
+
+    result = _.merge<InitialValue, {}, {}, {}, MergingValue, ExpectedResult>(initialValue, {}, {}, {}, mergingValue);
+    result = _.merge<InitialValue, {}, {}, {}, MergingValue, ExpectedResult>(initialValue, {}, {}, {}, mergingValue, customizer);
+    result = _.merge<InitialValue, {}, {}, {}, MergingValue, ExpectedResult>(initialValue, {}, {}, {}, mergingValue, customizer, any);
 
     // Once we get to the varargs version, you have to specify the result explicitly
     result = _.merge<ExpectedResult>(initialValue, {}, {}, {}, {}, mergingValue);
@@ -6575,23 +6597,10 @@ module TestMerge {
     result = _.merge<ExpectedResult>(initialValue, {}, {}, {}, {}, mergingValue, customizer, any);
 
     // Test for multiple combinations of many types
+    complicatedResult = _.merge({ a: 1 }, { b: "string" }, { c: {} }, { d: [1] }, { e: true });
 
-    type ComplicatedExpectedType = { a: number, b: string, c: {}, d: number[], e: boolean };
-
-    var complicatedResult: ComplicatedExpectedType = _.merge({ a: 1 },
-                                                             { b: "string" },
-                                                             { c: {} },
-                                                             { d: [1] },
-                                                             { e: true });
     // Test for type overriding
-
-    type ExpectedTypeAfterOverriding = { a: boolean };
-
-    var overriddenResult: ExpectedTypeAfterOverriding = _.merge({ a: 1 },
-                                                                { a: "string" },
-                                                                { a: {} },
-                                                                { a: [1] },
-                                                                { a: true });
+    overriddenResult = _.merge<{a: boolean}>({ a: 1 }, { a: "string" }, { a: {} }, { a: [1] }, { a: true });
 
     // Tests for basic chaining with merge
 
@@ -6599,17 +6608,33 @@ module TestMerge {
     result = _(initialValue).merge(mergingValue, customizer).value();
     result = _(initialValue).merge(mergingValue, customizer, any).value();
 
+    result = _(initialValue).merge<MergingValue, ExpectedResult>(mergingValue).value();
+    result = _(initialValue).merge<MergingValue, ExpectedResult>(mergingValue, customizer).value();
+    result = _(initialValue).merge<MergingValue, ExpectedResult>(mergingValue, customizer, any).value();
+
     result = _(initialValue).merge({}, mergingValue).value();
     result = _(initialValue).merge({}, mergingValue, customizer).value();
     result = _(initialValue).merge({}, mergingValue, customizer, any).value();
+
+    result = _(initialValue).merge<{}, MergingValue, ExpectedResult>({}, mergingValue).value();
+    result = _(initialValue).merge<{}, MergingValue, ExpectedResult>({}, mergingValue, customizer).value();
+    result = _(initialValue).merge<{}, MergingValue, ExpectedResult>({}, mergingValue, customizer, any).value();
 
     result = _(initialValue).merge({}, {}, mergingValue).value();
     result = _(initialValue).merge({}, {}, mergingValue, customizer).value();
     result = _(initialValue).merge({}, {}, mergingValue, customizer, any).value();
 
+    result = _(initialValue).merge<{}, {}, MergingValue, ExpectedResult>({}, {}, mergingValue).value();
+    result = _(initialValue).merge<{}, {}, MergingValue, ExpectedResult>({}, {}, mergingValue, customizer).value();
+    result = _(initialValue).merge<{}, {}, MergingValue, ExpectedResult>({}, {}, mergingValue, customizer, any).value();
+
     result = _(initialValue).merge({}, {}, {}, mergingValue).value();
     result = _(initialValue).merge({}, {}, {}, mergingValue, customizer).value();
     result = _(initialValue).merge({}, {}, {}, mergingValue, customizer, any).value();
+
+    result = _(initialValue).merge<{}, {}, {}, MergingValue, ExpectedResult>({}, {}, {}, mergingValue).value();
+    result = _(initialValue).merge<{}, {}, {}, MergingValue, ExpectedResult>({}, {}, {}, mergingValue, customizer).value();
+    result = _(initialValue).merge<{}, {}, {}, MergingValue, ExpectedResult>({}, {}, {}, mergingValue, customizer, any).value();
 
     // Once we get to the varargs version, you have to specify the result explicitly
     result = _(initialValue).merge<ExpectedResult>({}, {}, {}, {}, mergingValue).value();
@@ -6617,19 +6642,10 @@ module TestMerge {
     result = _(initialValue).merge<ExpectedResult>({}, {}, {}, {}, mergingValue, customizer, any).value();
 
     // Test complex multiple combinations with chaining
-
-    var complicatedResult: ComplicatedExpectedType = _({ a: 1 }).merge({ b: "string" },
-                                                                       { c: {} },
-                                                                       { d: [1] },
-                                                                       { e: true }).value();
+    complicatedResult = _({ a: 1 }).merge({ b: "string" }, { c: {} }, { d: [1] }, { e: true }).value();
 
     // Test for type overriding with chaining
-
-    var overriddenResult: ExpectedTypeAfterOverriding = _({ a: 1 }).merge({ a: "string" },
-                                                                          { a: {} },
-                                                                          { a: [1] },
-                                                                          { a: true }).value();
-
+    overriddenResult  = _({ a: 1 }).merge<{a: boolean}>({ a: "string" }, { a: {} }, { a: [1] }, { a: true }).value();
 }
 
 // _.methods
