@@ -13,16 +13,16 @@ declare module 'request-promise' {
 
     namespace requestPromise {
         interface RequestPromise extends request.Request {
-            then<TResult>(onfulfilled?: (value: any) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
-            then<TResult>(onfulfilled?: (value: any) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): Promise<TResult>;
-            catch(onrejected?: (reason: any) => any | PromiseLike<any>): Promise<any>;
-            catch(onrejected?: (reason: any) => void): Promise<any>;
-            catch(type: errors.RequestErrorConstructor, onrejected?: (reason: errors.RequestError) => void): Promise<any>;
-            catch(type: errors.StatusCodeErrorConstructor, onrejected?: (reason: errors.StatusCodeError) => void): Promise<any>;
-            catch(type: errors.TransformErrorConstructor, onrejected?: (reason: errors.TransformError) => void): Promise<any>;
-            finally<TResult>(handler: () => PromiseLike<TResult>): Promise<any>;
-            finally<TResult>(handler: () => TResult): Promise<any>;
-            promise(): Promise<any>;
+            then<TResult>(onfulfilled?: (value: http.IncomingMessage) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
+            then<TResult>(onfulfilled?: (value: http.IncomingMessage) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): Promise<TResult>;
+            catch<TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
+            catch<TResult>(onrejected?: (reason: any) => TResult): Promise<TResult>;
+            catch<TResult>(type: errors.RequestErrorConstructor, onrejected?: (reason: errors.RequestError) => void): Promise<TResult>;
+            catch<TResult>(type: errors.StatusCodeErrorConstructor, onrejected?: (reason: errors.StatusCodeError) => void): Promise<TResult>;
+            catch<TResult>(type: errors.TransformErrorConstructor, onrejected?: (reason: errors.TransformError) => void): Promise<TResult>;
+            finally<TResult>(handler: () => PromiseLike<TResult>): Promise<TResult>;
+            finally<TResult>(handler: () => TResult): Promise<TResult>;
+            promise(): Promise<http.IncomingMessage>;
             cancel(): void;
         }
 
