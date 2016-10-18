@@ -10,12 +10,12 @@ declare module 'request-promise-native' {
     import http = require('http');
 
     namespace requestPromise {
-        interface RequestPromise extends request.Request {
-            then<TResult>(onfulfilled?: (value: any) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
-            then<TResult>(onfulfilled?: (value: any) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): Promise<TResult>;
-            catch(onrejected?: (reason: any) => any | PromiseLike<any>): Promise<any>;
-            catch(onrejected?: (reason: any) => void): Promise<any>;
-            promise(): Promise<any>;
+        interface RequestPromise extends request.Request, Promise<http.IncomingMessage> {
+            then<TResult>(onfulfilled?: (value: http.IncomingMessage) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
+            then<TResult>(onfulfilled?: (value: http.IncomingMessage) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): Promise<TResult>;
+            catch<TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
+            catch<TResult>(onrejected?: (reason: any) => TResult): Promise<TResult>;
+            promise(): Promise<http.IncomingMessage>;
             cancel(): void;
         }
 
