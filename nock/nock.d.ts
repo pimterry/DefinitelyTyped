@@ -92,6 +92,7 @@ declare module "nock" {
             once(): this;
             twice(): this;
             thrice(): this;
+            optionally(): this;
 
             delay(opts: number | { head?: number; body?: number; }): this;
             delayBody(timeMs: number): this;
